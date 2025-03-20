@@ -62,7 +62,7 @@ To verify that Stainless is installed correctly, run the following command in yo
 
 ## Tutorial
 
-Now, let's introduce the basics of Stainless. If this tutorial does not fully meet your needs, additional resources are available online.
+Now, let's introduce the basics of Stainless. If this tutorial does not fully meet your needs, additional resources are available online:
 - A basic tutorial can be found on [Stainless documentation website](https://epfl-lara.github.io/stainless/tutorial.html). 
 - More documentation and material are available on the [official repository page](https://github.com/epfl-lara/stainless/#further-documentation-and-learning-materials). 
 - If you are looking for concrete verified examples, you can find a collection of benchmark programs [here](https://github.com/epfl-lara/stainless/blob/main/frontends/benchmarks/verification/valid/). 
@@ -171,10 +171,11 @@ def factorial(n: BigInt): BigInt = {
 ```
 
 To prove that the factorial of a natural number is always positive, we typically write an induction proof.
-$$\begin{align*}
-&\text{Base case:} \quad \quad\quad \text{factorial}(0) = 1 \\
-&\text{Inductive step:} \quad \text{factorial}(n) = \text{factorial}(n-1) \times n \geq 1 \quad (\text{by IH and the fact that } n \geq 1)
-\end{align*}$$
+
+$\text{Base case:} \quad \quad\quad \text{factorial}(0) = 1$
+
+$\text{Inductive step:} \quad \text{factorial}(n) = \text{factorial}(n-1) \times n \geq 1 \quad (\text{by IH and the fact that } n \geq 1)$
+
 For simple cases, Stainless can automatically infer the induction step and verify the property.
 ```scala
 def factorial(n: BigInt): BigInt = {
