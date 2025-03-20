@@ -7,9 +7,7 @@ It also checks whether the program does not contain runtime errors and if it ter
 ## Installation
 
 ### Java Development Kit
-In order to run stainless, as well as the programs you will verify, you will need **Java 17**.
-
-If you already have Java installed you can check your Java version using 
+To run Stainless and verify your programs, you need **Java 17**. If you already have Java installed, you can check your version using: 
 ```shell
 > java -version
 openjdk version "17.0.9" 2023-10-17
@@ -18,13 +16,13 @@ OpenJDK 64-Bit Server VM Temurin-17.0.9+9 (build 17.0.9+9, mixed mode, sharing)
 > javac -version
 javac 17.0.9
 ```
-The exact version might vary, but the major version should be 17.
+The exact version may vary, but the major version should be 17.
 
-On some Linux distributions, a command exists to change your "active" JDK if multiple ones are installed on your machine. Examples include:
+On some Linux distributions, you can switch between multiple installed JDKs using a system command. Examples include:
 - **Debian-based:** `update-alternatives -config java`;
 - **[ArchLinux-based](https://wiki.archlinux.org/title/Java#Switching_between_JVM):** `archlinux-java set java-17-openjdk`.
 
-On macOS, [SDKMAN!](https://sdkman.io/) allows you to easily install and switch between multiple JDK versions.
+On macOS, [SDKMAN!](https://sdkman.io/) makes it easy to install and switch between multiple JDK versions:
 - To install SDKMAN!, you can refer to the [installation instructions](https://sdkman.io/install).
 - You can see the list of available versions with `sdk list java`.
 - You can install a specific version with `sdk install java 17.0.14-tem` (any version works as long as it is java 17).
@@ -33,24 +31,24 @@ On macOS, [SDKMAN!](https://sdkman.io/) allows you to easily install and switch 
 
 
 ### Scala and sbt
-You will also need a way to compile scala programs. For that you can install sbt, a build tool for Scala projects. You can find the installation instructions [here](https://www.scala-sbt.org/download). Once you have downloaded sbt, you can test your installation by running
+You also need a way to compile scala programs. The recommended approach is to install **sbt**, a build tool for Scala projects. You can find the installation instructions [here](https://www.scala-sbt.org/download). Once sbt is installed, verify it by running:
 ```shell
 > sbt -version 
 sbt runner version: 1.10.11
 ```
 
-Common IDEs for working with Scala are Visual Studio Code with the Scala Metals extension and IntelliJ IDEA with the Scala plugin. 
+Common IDEs for working with Scala include **Visual Studio Code** with the **Scala Metals** extension and **IntelliJ IDEA** with the **Scala plugin**. 
 
 ### Stainless
  Let's now install Stainless!
 
-1. You can download the latest Stainless release from the [releases page](https://github.com/epfl-lara/stainless/releases) on GitHub. Make sure to pick the appropriate ZIP for your operating system
-2. Unzip the the file you just downloaded to a directory.
-3. (Recommended) Add this directory to your PATH. This will let you invoke Stainless via the stainless command instead of its fully qualified path.
+1. Download the latest Stainless release from the [releases page](https://github.com/epfl-lara/stainless/releases) on GitHub. Make sure to select the appropriate ZIP file for your operating system
+2. Unzip the the file you just downloaded into a directory of your choice.
+3. *(Recommended)* Add this directory to your PATH. This allows you to run Stainless using the stainless command instead of specifying its fully path.
 
-[This video](https://mediaspace.epfl.ch/media/01-21%2C%20Stainless%20Tutorial%201_4/0_h1bv5a7v) shows a step-by-step installation of Stainless in case you need more guidance. 
+For a step-by-step guide, you can watch [this video](https://mediaspace.epfl.ch/media/01-21%2C%20Stainless%20Tutorial%201_4/0_h1bv5a7v). 
 
-You can check if Stainless is correctly installed by running the following command in your terminal (you may need to add `.sh` or `.bat` after `stainless` depending on your operating system):
+To verify that Stainless is installed correctly, run the following command in your terminal (you may need to add `.sh` or `.bat` after `stainless`, depending on your operating system):
 ```shell
 > stainless --version
 [  Info  ] Stainless verification tool (https://github.com/epfl-lara/stainless)
@@ -64,15 +62,18 @@ You can check if Stainless is correctly installed by running the following comma
 
 ## Tutorial
 
-We are now going to introduce you to the basics of Stainless. If you do not find this tutorial satisfactory, or if it does not suit your needs, other resources are available online.
-A basic tutorial on stainless can be found on [Stainless documentation website](https://epfl-lara.github.io/stainless/tutorial.html). Some additional resources can be found on the [official repository page](https://github.com/epfl-lara/stainless/#further-documentation-and-learning-materials). 
-If you are looking for concrete verified examples, [here](https://github.com/epfl-lara/stainless/blob/main/frontends/benchmarks/verification/valid/) are some verified examples used as benchmarks for Stainless. For more involved examples, you can check out [Bolts](https://github.com/epfl-lara/bolts), a repository featuring case studies of verified programs using Stainless.
+Now, let's introduce the basics of Stainless. If this tutorial does not fully meet your needs, additional resources are available online.
+- A basic tutorial can be found on [Stainless documentation website](https://epfl-lara.github.io/stainless/tutorial.html). 
+- More documentation and material are available on the [official repository page](https://github.com/epfl-lara/stainless/#further-documentation-and-learning-materials). 
+- If you are looking for concrete verified examples, you can find a collection of benchmark programs [here](https://github.com/epfl-lara/stainless/blob/main/frontends/benchmarks/verification/valid/). 
+- For more advanced case studies of verified programs using Stainless, check out the [Bolts repository](https://github.com/epfl-lara/bolts).
 
-In order to follow the tutorial, start by cloning this repository.
+To follow this tutorial, start by cloning this repository.
 
-### Preconditions and postconditions
+### Preconditions and Postconditions
 
- As mentioned earlier, Stainless accepts Scala programs as input. Properties that the user wants to verify are expressed as annotations in the code. Note that these annotations will be converted to runtime assertions when executed. Hence, annotated programs can still be compiled and run as regular Scala programs. Let's see how this works with a simple example. Open the file [`Tutorial.scala`](src/main/scala/Tutorial.scala) under `src/main/scala`. We start by defining a function that computes the square of an integer.
+ As mentioned earlier, Stainless takes Scala programs as input. Properties that you want to verify are expressed as **annotations** in the code. These annotations are converted into runtime assertions when the program is executed, meaning that annotated programs can still be compiled and run like regular Scala programs. 
+ Let's see how this works with a simple example. Open the file [`Tutorial.scala`](src/main/scala/Tutorial.scala) under `src/main/scala`. We start by defining a function that computes the square of an integer.
 
 ```scala
 def square(x: BigInt): BigInt = {
@@ -80,7 +81,7 @@ def square(x: BigInt): BigInt = {
 }
 ```
 
-A property we know about squaring is that the result is always non-negative. We can express this property as a postcondition of the `square` function. To do this, we add an `ensuring` clause at the end of the function definition. Inside the `ensuring` clause, we write the property we want to verify. The property is a function that takes the result of the function as input and returns a boolean.
+A property of squaring is that the result is always non-negative. We can express this property as a **postcondition** using an `ensuring` clause at the end of the function definition. This clause specified a property that the function's result must satisfy. This property is written as a lambda that takes the result of the function as input and returns a boolean.
 
 ```scala
 def square(x: BigInt): BigInt = {
@@ -88,7 +89,7 @@ def square(x: BigInt): BigInt = {
 }.ensuring(res => res >= 0)
 ```
 
-If you run stainless on this file, you should see the following output where most of the text is colored in green.
+If you run stainless on this file, you should see the following output, where most of the text is colored green.
 
 ```shell
 > stainless src/main/scala/Tutorial.scala
@@ -106,25 +107,26 @@ If you run stainless on this file, you should see the following output where mos
 [  Info  ] ║ total: 1    valid: 1    (0 from cache, 0 trivial) invalid: 0    unknown: 0    time:    0.08           ║
 [  Info  ] ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
-The summary shows that the postcondition of the `square` function has been proven valid. You can see other information such as the time taken to verify the property, the solver used and the line number where the property is defined.
-Note that the type used in this function is `BigInt` instead of `Int`. `Int` are also supported by Stainless but you would need to prove that the result of the square function does not overflow.
+The summary shows that the postcondition of the `square` function has been proven valid. You can see other details, such as the time taken to verify the property, the solver used, and the line number where the property is defined.
 
-Suppose that we know that the input of your square function is always at least 2.
-We could prove additional properties such as `res > x`.
+Note that the function uses `BigInt` instead of `Int`. While `Int` is also supported by Stainless, you would need to prove that the result of the `square` function does not overflow.
+
+Now, suppose we know that the input to the `square` function is always at least 2.
+In that case, we could attempt to prove additional properties such as `res > x`.
 ```scala
 // Trust me: x >= 2
 def square(x: BigInt): BigInt = {
   x * x
 }.ensuring(res => res >= 0 && res > x)
 ```
-Unfortunately, the snippet is not going to be verified by Stainless, since the property does not hold for all inputs and Stainless has no way of knowing what you know about the input. To fix this, we can add preconditions to the function. Preconditions are expressed using the `require` keyword, and are properties of the input that must hold whenever the function is called. 
+Unfortunately, Stainless will not verify this snippet because the property does not hold for all inputs, and Stainless has no way of knowing what you assume about the input. To fix this issue, we can explicitly specify assumptions about the input using **preconditions**, expressed with the `require` keyword. Preconditions define conditions that must hold whenever the function is called. 
 ```scala
 def square(x: BigInt): BigInt = {
   require(x >= 2)
   x * x
 }.ensuring(res => res >= 0 && res > x)
 ```
-Stainless should now be able to verify the postcondition of the `square` function. If you call the function in some other part of the code with an input that does not satisfy the precondition, Stainless will complain saying that the precondition is not satisfied.
+Stainless should now be able to verify the postcondition of the `square` function. If you call the function elsewhere in your code with an input that does not satisfy the precondition, Stainless will complain, stating that the precondition is not met.
 
 ```scala
 def square(x: BigInt): BigInt = {
@@ -138,14 +140,14 @@ val squareOfOne = square(1)
 
 ### Recursion and termination
 
-If you are familiar with inductive reasoning, you probably know that proving properties about recursive functions can be done by structural induction. Stainless supports this kind of reasoning and in easy cases does not require manual assistance. Let's start by defining a recursive function that computes the factorial of an integer.
+If you are familiar with inductive reasoning, you probably know that proving properties about recursive functions often relies on structural induction. Stainless supports this kind of reasoning and, in simple cases, can handle it automatically. Let's define a recursive function that computes the factorial of an integer.
 
 ```scala
 def factorial(n: BigInt): BigInt = {
   if n == 0 then 1 else factorial(n - 1) * n
 }
 ```
-If you run Stainless on this piece of code, you see a lot of warnings and a red line indicating that a measure is missing for `factorial`. A measure is a non-negative integer value that decreases with each recursive call. If a measure exists for the function, it is guaranteed to terminate. When verifying a program, Stainless tries to prove that every function always terminate. To do this, it tries to infer likely measures for recursive functions. Our factorial function can loop indefinitely if the input is negative. We therefore need to fix this by adding a precondition to the function.
+If you run Stainless on this code, you will see several warnings, along with a red line indicating that a measure is missing for `factorial`. A **termination measure** is a non-negative integer value that decreases with each recursive call. If such a measure exists, the function is guaranteed to terminate. When verifying a program, Stainless attempts to prove that every function terminates. To do this, it tries to infer likely measures for recursive functions. Our `factorial` function can loop indefinitely if given a negative input. To prevent this, we need to add a precondition to ensure that the function is only called with non-negative inputs.
 
 ```scala
 // Stainless automatically finds an appropriate measure: n
@@ -155,7 +157,7 @@ def factorial(n: BigInt): BigInt = {
 }
 ```
 
-Note that if the measure is too involved for Stainless to infer, you can specify it manually.
+If the measure is too complex for Stainless to infer automatically, you can specify it manually using the `decreases` annotation.
 
 ```scala
 // imports the decreases annotation
@@ -168,12 +170,12 @@ def factorial(n: BigInt): BigInt = {
 }
 ```
 
-If we want to prove that the factorial of a natural number is always positive, we generally write an induction proof.
+To prove that the factorial of a natural number is always positive, we typically write an induction proof.
 $$\begin{align*}
 &\text{Base case:} \quad \quad\quad \text{factorial}(0) = 1 \\
 &\text{Inductive step:} \quad \text{factorial}(n) = \text{factorial}(n-1) \times n \geq 1 \quad (\text{by IH and the fact that } n \geq 1)
 \end{align*}$$
-In easy case Stainless can automatically guess the induction step and proves the property.
+For simple cases, Stainless can automatically infer the induction step and verify the property.
 ```scala
 def factorial(n: BigInt): BigInt = {
   require(n >= 0)
@@ -181,18 +183,18 @@ def factorial(n: BigInt): BigInt = {
 }.ensuring(res => res >= 1)
 ```
 
-Sometimes, some properties cannot be expressed by solely using preconditions and postconditions. In such cases, you can define external functions that will act as theorems.
-For instance, let's prove that the factorial function is increasing.
+### External theorems
+Sometimes, some properties cannot be expressed using just preconditions and postconditions. In such cases, we define **external functions** that serve as theorems.
+For example, let's prove that the factorial function is increasing.
 ```scala
 def factorialIncreasing(n: BigInt, m: BigInt): Unit = {
   require(n >= 0)
   require(m >= 0)
 }.ensuring(factorial(n + m) >= factorial(n))
 ```
-In Scala `Unit` is the equivalent of `void` in Java. It is used to indicate that the function does not return anything (in reality it implicitly returns the only `Unit` value `()`). The ensuring clause contains the theorem we want to prove. Since the function `factorialIncreasing` is not recursive (because it does not do anything), Stainless does not know that it should use induction to prove the theorem. 
-In fact, if you run Stainless on this file, you will see that it will fail to prove the theorem. If the theorem is easy enough, you can add an `@induct` annotation to the parameter you want to induct on. Stainless will try to prove the theorem by induction on the annotated parameter.
+In Scala `Unit` is similar to `void` in Java - it indicates that the function does not return anything (though it implicitly returns `()`). The ensuring clause specifies the theorem we want to prove. Since the function `factorialIncreasing` is not recursive (because its body is empty), Stainless does not automatically apply induction. Running Stainless on this code will result in a verification failure. If the theorem is easy enough, you can add an `@induct` annotation to the parameter you want to induct on. Stainless will try to prove the theorem by induction on the annotated parameter.
 ```scala
-// imports the @induct annotation
+// Import the @induct annotation
 import stainless.annotation.*
 
 def factorialIncreasing(@induct n: BigInt, m: BigInt): Unit = {
@@ -200,16 +202,14 @@ def factorialIncreasing(@induct n: BigInt, m: BigInt): Unit = {
   require(m >= 0)
 }.ensuring(factorial(n + m) >= factorial(n))
 ```
-The theorem can now be used in other parts of the program to prove more complex properties. To do that, just call the theorem you just proved inside the body of the one you are currently proving. Essentially, the body of a theorem is a sketch of its proof!
+The theorem can now be used to prove more complex properties by calling it within other proofs. To do so, call the theorem you just proved inside the body of the one you are currently proving. The body of a theorem essentially serves as a sketch of its proof:
 ```scala
 def factorialIncreasing2(m: BigInt, n: BigInt): Unit = {
   require(0 <= m && m <= n)
   factorialIncreasing(m, n - m)
 }.ensuring(factorial(m) <= factorial(n))
 ```
-The above theorem could still be proved without the use of `factorialIncreasing`. However, it would be too complex to be proved by just using the `@induct` annotation. We would be forced to write a proper
-proof by induction.
-
+While this theorem could be proven without using `factorialIncreasing`, the proof would be too complex for Stainless to infer automatically using just `@induct`. In that case, we would need to write an explicit inductive proof.
 ```scala
 def factorialIncreasing(m: BigInt, n: BigInt): Unit = {
   require(0 <= m && m <= n)
@@ -217,12 +217,16 @@ def factorialIncreasing(m: BigInt, n: BigInt): Unit = {
 }.ensuring(factorial(m) <= factorial(n))
 ```
 
-### CLI arguments, annotations and afterthoughts
+### CLI arguments and annotations
 
-Command-line arguments can be passed to Stainless to get the most out of the verification process. For instance, tweaking the timeout value can significantly affect the verification time. For small and independent files, a timeout of 2 seconds is usually enough. When dealing with larger programs or more complex theorems, you might want to increase the timeout value. Some datatypes like `Int`(where overflow is a concern) tend to be more difficult to verify than their `BigInt` counterparts. For this tutorial, the timeout was set to 2 seconds. Similarly, you can choose to enabling caching to store the results of previous verification attempts. This will speed up the verification process for verification conditions that have not changed between 2 runs. On the other hand, the cache can grow quite large and needs to be cleaned up from time to time.
-For this tutorial, caching was disabled. Finally some flags enhance user experience. The compact flag reduces the amount of information displayed in the terminal to only failed verification conditions. The watch flag reruns Stainless every time a file is saved.
+Command-line arguments can be passed to Stainless to get the most out of the verification process. For example, tweaking the **timeout** can significantly impact the verification time. For small, independent files, 2 seconds is usually sufficient. For larger programs or complex theorems, you may need to increase the timeout. Some datatypes like `Int`(which has overflow concerns) tend to be harder to verify than their `BigInt` counterparts. For this tutorial, the timeout was set to 2 seconds. 
 
-Command line arguments do not need to be passed every time you run Stainless. You can create a configuration file called `stainless.conf` in the directory where you run Stainless (in this case the root of the repository). For example, the following configuration file sets the timeout to 2 seconds, enables caching, compact information mode and watches for changes in the files.
+Similarly, you can choose to enable caching to store the results of previous verification attempts. This speeds up verification for conditions that have not changed between two runs. However, the cache can grow quite large and needs to be cleaned up periodically.
+For this tutorial, caching was disabled. 
+
+Finally, some flags enhance the user experience. The compact flag reduces terminal output to display only failed verification conditions, while the watch flag reruns Stainless every time a file is saved.
+
+Command line arguments do not need to be passed manually each time you run Stainless. Instead, ou can create a configuration file called `stainless.conf` in the directory where you run Stainless (typically the root of the repository). The following example configuration file sets the timeout to 2 seconds, enables caching, activates compact information mode and watches for file changes.
 
 ```shell
 timeout=2
@@ -233,5 +237,9 @@ watch=true
 
 For other command-line options and their descriptions, you can run `stainless --help`.
 
-Stainless features a wide range of annotations to make the verification process more flexible. The `@extern`annotation ignores the content of a function. It the function has a postcondition, it is assumed to be true. This is useful when some parts of the code are not supported by Stainless or are not meant to be verified. This can also be used for designing axioms. The `@opaque`annotation hides the content of a function. From the outside, only the postcondition and the preconditions of the function will be visible. This can be used to speed up the verification process or to make the rest of the program independent of the implementation of that function. Be aware that if a function is opaque, its postconditions generally need to be stronger (because they fully need to characterize the function's behavior). Other annotations are described in the [official documentation](https://epfl-lara.github.io/stainless/library.html#annotations).
+Stainless features a wide range of annotations to make the verification process more flexible. 
+- The `@extern`annotation ignores the content of a function. It the function has a postcondition, Stainless assumes it to be true. This is useful for parts of the code that are not supported by Stainless or are not meant to be verified. It can also be used to define axioms. 
+- The `@opaque`annotation hides the content of a function. From the outside, only its preconditions and preconditions are  visible. This can be speed up the verification process or make the rest of the program independent of the function's implementation. Be aware that when a function is opaque, its postconditions typically need to be stronger, as they must fully describe its behavior. 
+
+For a full list of available annotations, refer to the [official documentation](https://epfl-lara.github.io/stainless/library.html#annotations).
 
