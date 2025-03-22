@@ -244,3 +244,12 @@ Stainless features a wide range of annotations to make the verification process 
 
 For a full list of available annotations, refer to the [official documentation](https://epfl-lara.github.io/stainless/library.html#annotations).
 
+## FAQ
+
+<details>
+<summary> <b>Q:</b> Does Stainless support all Scala features? 
+</summary>
+<br>
+No, Stainless does not (yet) support all Scala features. Advanced features of the type system, such as bounded polymorphism, are not supported. 
+Additionally, Stainless lacks support for most of the standard library and instead provides its own data structures (e.g., lists). This includes exceptions and floating-point numbers.
+</details>
