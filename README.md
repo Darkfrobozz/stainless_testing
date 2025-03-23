@@ -81,7 +81,7 @@ def square(x: BigInt): BigInt = {
 }
 ```
 
-A property of squaring is that the result is always non-negative. We can express this property as a **postcondition** using an `ensuring` clause at the end of the function definition. This clause specified a property that the function's result must satisfy. This property is written as a lambda that takes the result of the function as input and returns a boolean.
+A property of squaring is that the result is always non-negative. We can express this property as a **postcondition** using an `ensuring` clause at the end of the function definition. This clause specified a property that the function's result must satisfy. This property is written as a lambda (anonymous function) that takes the result of the function as input and returns a boolean.
 
 ```scala
 def square(x: BigInt): BigInt = {
@@ -184,8 +184,8 @@ def factorial(n: BigInt): BigInt = {
 }.ensuring(res => res >= 1)
 ```
 
-### External theorems
-Sometimes, some properties cannot be expressed using just preconditions and postconditions. In such cases, we define **external functions** that serve as theorems.
+### Theorems
+Sometimes, some properties cannot be expressed using just preconditions and postconditions. In such cases, we define **separate functions** that serve as theorems.
 For example, let's prove that the factorial function is increasing.
 ```scala
 def factorialIncreasing(n: BigInt, m: BigInt): Unit = {
