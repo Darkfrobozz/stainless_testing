@@ -1,5 +1,6 @@
 // For more information on writing tests, see
 import Tutorial.{pow, theoreomSlowEqualsFast}
+import Tutorial.slowPow
 // https://scalameta.org/munit/docs/getting-started.html
 class MySuite extends munit.FunSuite {
   test("Testing Fibonnaci") {
@@ -25,6 +26,16 @@ class MySuite extends munit.FunSuite {
 
 
   test("testing theoreom") {
-    assertEquals(theoreomSlowEqualsFast(BigInt(2), BigInt(-1)), true)
+    assertEquals(theoreomSlowEqualsFast(BigInt(-1), BigInt(2)), true)
+  }
+
+
+  test("testing equality fastpow") {
+    assertEquals(pow(BigInt(-1), BigInt(2)), BigInt(1))
+  }
+
+
+  test("testing equality slowpow") {
+    assertEquals(slowPow(BigInt(-1), BigInt(2)), BigInt(1))
   }
 }

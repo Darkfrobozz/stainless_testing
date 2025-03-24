@@ -53,10 +53,10 @@ object Tutorial {
   def pow(x: BigInt, n: BigInt) : BigInt = {
     require(n >= 0)
     if (n == 0) BigInt(1) else {
-      val rem = (x % 2 + x) % 2
+      val rem = (n % 2 + 2) % 2
       x match
         case x if rem == 1 => x * pow(x * x, (n - 1)/2)
-        case x if rem == 0 => x * pow(x * x, n/2) 
+        case x if rem == 0 => pow(x * x, n/2) 
     }
   }.ensuring(res => {
     postPow(x, n, res)
