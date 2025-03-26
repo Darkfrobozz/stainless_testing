@@ -38,4 +38,9 @@ class MySuite extends munit.FunSuite {
   test("testing equality slowpow") {
     assertEquals(slowPow(BigInt(-1), BigInt(2)), BigInt(1))
   }
+
+
+  test("testing counter-example") {
+    Term.normal(If(False(), False(), iszero(Nil())))
+  }
 }
