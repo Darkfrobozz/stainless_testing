@@ -47,6 +47,12 @@ object Term {
             case _ => false 
     }
 
+    def hasSuccForm(t : Term) : Boolean = {
+        t match
+            case Succ(t1) => true
+            case _ => false
+    }
+
     // This is pure by virtue of being a functional algorithm...
     @induct
     def smallStep(t: Term): Term = {
@@ -57,7 +63,7 @@ object Term {
                     case False() => t3
                     case If(t11, t12, t13) => If(smallStep(t11), t12, t13)
                     case _ => t
-            case Succ(t1) => smallStep(t1)
+            case Succ(t1) => Succ(smallStep(t1))
             case Pred(t1) =>
                 t1 match
                     case Succ(t2) => t2
@@ -73,13 +79,33 @@ object Term {
             case _ => t
     }
 
-    // This is also pure by virtue of being a functional algorithm
-    // So given that it terminates we know that normal forms are the same
-    def termination(t : Term) : Unit = {
+    def smallstepRetainsNv(t : Term) : Unit = {
+        require(checkNV(t))
         t match
-            case If(t1, t2, t3) => termination(t1)
-            case _ => ()
-    }
+            case Nil() => ()
+            case Succ(t1) => smallstepRetainsNv(t1)
+    }.ensuring(checkNV(smallStep(t)))
+
+    def smallstepRetainsSize(t : Term) : Unit = {
+        require(checkNV(t))
+        t match
+            case Nil() => ()
+            case Succ(t1) => smallstepRetainsSize(t1)
+    }.ensuring(size(t) == size(smallStep(t)))
+
+    def nvDefinedBySize(t1 : Term, t2 : Term) : Unit = {
+        require(size(t1) == size(t2) && checkNV(t1) && checkNV(t2))
+        (t1, t2) match
+            case (Nil(), Nil()) => ()
+            case (Succ(t11), Succ(t21)) => nvDefinedBySize(t11, t21)
+    }.ensuring(t1 == t2)
+
+    def nvIsNormal(t : Term) : Unit = {
+        require(checkNV(t))
+        smallstepRetainsNv(t)
+        smallstepRetainsSize(t)
+        nvDefinedBySize(t, smallStep(t))
+    }.ensuring(t == smallStep(t))
 
     def size(t : Term) : BigInt = {
         BigInt(1) + (t match
@@ -141,19 +167,31 @@ object Term {
                     case k if checkNV(k) => False()
                     case _ => iszero(k)
             case _ => res
-    }
+    }.ensuring(res => size(res) <= size(t))
+
 
     def normalValues(t : Term) : Unit = {
         require(checkBool(t) || checkNV(t))
+        decreases(size(t))
         monotoneReductions(t)
         t match
             case t if checkBool(t) => ()
-            case t if checkNV(t) => 
+            case t if checkNV(t) => {
+                nvIsNormal(t)
+                assert(t == smallStep(t))
                 t match
-                    case Succ(t1) =>
-                        normalValues(normal(t1))
-                    case Nil() => () 
+                    case Nil() => ()
+                    case Succ(t1) => normalValues(t1)
+            }
     }.ensuring(normal(t) == t)
+
+    def normalIsFixpoint(t: Term) : Unit = {
+        if (checkNV(t) || checkBool(t)) {
+            normalValues(t)
+        } else {
+
+        }
+    }.ensuring(smallStep(normal(t)) == t)
 
     // def getTypeError(t: Term): TypeError = {
     //     val res = normal(t)

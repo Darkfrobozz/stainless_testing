@@ -43,4 +43,9 @@ class MySuite extends munit.FunSuite {
   test("testing counter-example") {
     Term.normal(If(False(), False(), iszero(Nil())))
   }
+
+
+  test("testing counter-example for retains Succ") {
+    Term.smallstepRetainsSucc(Succ(Pred(Nil())))
+  }
 }
