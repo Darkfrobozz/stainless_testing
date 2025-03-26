@@ -37,8 +37,7 @@ object t {
     }
 
     def size(t : Term) : BigInt = {
-        BigInt(1) + 
-        (t match
+        BigInt(1) + (t match
             case Nil() => BigInt(0)
             case True() => BigInt(0)
             case False() => BigInt(0)
@@ -46,17 +45,33 @@ object t {
             case Succ(t1) => size(t1)
             case Pred(t1) => size(t1)
             case iszero(t1) => size(t1)
-        )
-        
-    } 
+        ) 
+    }.ensuring(res => res >= 1)
 
-    @induct
+    def monotoneReductions(t: Term) : Unit = {
+        t match
+            case If(t1, t2, t3) => monotoneReductions(t1)
+            case _ => ()
+    }.ensuring(size(smallStep(t)) <= size(t))
+
     def normal(t : Term) : Term = {
+        decreases(size(t))
         val res = smallStep(t)
+        // If res can change size...
+        // If we can get this to be true we are good!
+        monotoneReductions(t)
+        assert(size(res) <= size(t))
         res match
             case If(t1, t2, t3) => {
-                normal(smallStep(t1))
-            }
+                assert(size(t1) < size(res))
+                assert(size(t2) < size(res))
+                assert(size(t3) < size(res))
+                val k = normal(t1) 
+                k match
+                    case True() => normal(t2)
+                    case False() => normal(t3)
+                    case _ => If(k, t2, t3) 
+            } 
             case _ => res
     }
 
