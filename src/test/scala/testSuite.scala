@@ -46,6 +46,6 @@ class MySuite extends munit.FunSuite {
 
 
   test("testing counter-example for retains Succ") {
-    Term.smallstepRetainsSucc(Succ(Pred(Nil())))
+    Term.findNormal(Pred(True()))
   }
 }

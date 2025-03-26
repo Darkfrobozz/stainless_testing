@@ -68,16 +68,46 @@ object Term {
                 t1 match
                     case Succ(t2) => t2
                     case Nil() => Nil()
-                    case _ => smallStep(t1)
+                    case _ => Pred(smallStep(t1))
             case iszero(t1) => 
-                t1 match
-                    // This one is by far the hardest...
-                    case Succ(t2) => t2
-                    case Nil() => Nil()
-                    case _ => smallStep(t1)
-                smallStep(t1)
+                if (checkNV(t1)) {
+                    t1 match
+                        case Succ(t1) => False()
+                        case Nil() => True() 
+                } else {
+                    iszero(smallStep(t1))
+                }
             case _ => t
     }
+
+    // New approach prove that a small step reduces the size or remains the same.
+    def reducesOrRemainsSame(t : Term) : Unit = {
+        decreases(t)
+        t match
+            case If(t1, t2, t3) =>
+                t1 match
+                    case True() => assert(size(t2) < size(t))
+                    case False() => assert(size(t3) < size(t))
+                    case If(t11, t12, t13) => reducesOrRemainsSame(t11)
+                    case _ => ()
+            case Succ(t1) => reducesOrRemainsSame(t1)
+            case Pred(t1) =>
+                t1 match
+                    case Succ(t2) =>
+                        assert(size(t2) < size(t1))
+                        assert(size(t2) < size(t))
+                    case Nil() => ()
+                    case _ => reducesOrRemainsSame(t1)
+            case iszero(t1) => 
+                if (checkNV(t1)) {
+                    t1 match
+                        case Succ(t1) => ()
+                        case Nil() => () 
+                } else {
+                    reducesOrRemainsSame(t1)
+                }
+            case _ => ()
+    }.ensuring(smallStep(t) == t || size(smallStep(t)) < size(t))
 
     def smallstepRetainsNv(t : Term) : Unit = {
         require(checkNV(t))
@@ -106,6 +136,36 @@ object Term {
         smallstepRetainsSize(t)
         nvDefinedBySize(t, smallStep(t))
     }.ensuring(t == smallStep(t))
+
+
+    def findNormal(t : Term) : Term = {
+        decreases(size(t))
+        val k = smallStep(t)
+        reducesOrRemainsSame(t)
+        if (k == t) {
+            t
+        } else {
+            findNormal(k)
+        }
+    }.ensuring(res => smallStep(res) == res)
+
+    // def basicValuesFixpoint(t : Term) : Unit = {
+    //     require(hasBasicValueForm(findNormal(t)))
+    // }.ensuring(smallStep(findNormal(t)) == t)
+
+    @ignore
+    def normalIsFixpoint(t: Term) : Unit = {
+        decreases(t)
+        findNormal(t) match
+            case Nil() => ()
+            case True() => ()
+            case False() => ()
+            case If(t1, t2, t3) => normalIsFixpoint(t1)
+            case Succ(t1) => normalIsFixpoint(t1)
+            case Pred(t1) => normalIsFixpoint(t1)
+            case iszero(t1) => normalIsFixpoint(t1)
+        
+    }.ensuring(smallStep(findNormal(t)) == findNormal(t))
 
     def size(t : Term) : BigInt = {
         BigInt(1) + (t match
@@ -185,13 +245,6 @@ object Term {
             }
     }.ensuring(normal(t) == t)
 
-    def normalIsFixpoint(t: Term) : Unit = {
-        if (checkNV(t) || checkBool(t)) {
-            normalValues(t)
-        } else {
-
-        }
-    }.ensuring(smallStep(normal(t)) == t)
 
     // def getTypeError(t: Term): TypeError = {
     //     val res = normal(t)
