@@ -149,24 +149,6 @@ object Term {
         }
     }.ensuring(res => smallStep(res) == res)
 
-    // def basicValuesFixpoint(t : Term) : Unit = {
-    //     require(hasBasicValueForm(findNormal(t)))
-    // }.ensuring(smallStep(findNormal(t)) == t)
-
-    @ignore
-    def normalIsFixpoint(t: Term) : Unit = {
-        decreases(t)
-        findNormal(t) match
-            case Nil() => ()
-            case True() => ()
-            case False() => ()
-            case If(t1, t2, t3) => normalIsFixpoint(t1)
-            case Succ(t1) => normalIsFixpoint(t1)
-            case Pred(t1) => normalIsFixpoint(t1)
-            case iszero(t1) => normalIsFixpoint(t1)
-        
-    }.ensuring(smallStep(findNormal(t)) == findNormal(t))
-
     def size(t : Term) : BigInt = {
         BigInt(1) + (t match
             case Nil() => BigInt(0)

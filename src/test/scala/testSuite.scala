@@ -48,4 +48,5 @@ class MySuite extends munit.FunSuite {
   test("testing counter-example for retains Succ") {
     Term.findNormal(Pred(True()))
   }
+
 }
