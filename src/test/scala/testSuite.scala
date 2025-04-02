@@ -1,7 +1,9 @@
-import Arthimetic.{Term, Nil, Pred, If, iszero, True, False}
+import Arthimetic.{Term, Zero, Pred, If, iszero, True, False}
 // For more information on writing tests, see
 import Tutorial.{pow, theoreomSlowEqualsFast}
 import Tutorial.slowPow
+import Arthimetic.NormalProof
+import Arthimetic.TypeProofs
 // https://scalameta.org/munit/docs/getting-started.html
 class MySuite extends munit.FunSuite {
   test("Testing Fibonnaci") {
@@ -40,14 +42,28 @@ class MySuite extends munit.FunSuite {
     assertEquals(slowPow(BigInt(-1), BigInt(2)), BigInt(1))
   }
 
+  test("testing counter-example for retains Succ") {
+    NormalProof.findNormal(Pred(True))
+  }
 
-  test("testing counter-example") {
-    Term.normal(If(False(), False(), iszero(Nil())))
+  // Found this huge bug from this counter example!!
+  test("Testing counter-example for preservation") {
+    val k = If(If(True, False, True), If(True, Zero, Zero), Zero)
+    val after = k.smallStep
+    TypeProofs.preservation(k)
   }
 
 
-  test("testing counter-example for retains Succ") {
-    Term.findNormal(Pred(True()))
+  // Found this huge bug from this counter example!!
+  test("Testing counter-example for smallstepIf") {
+    val k = If(If(True, False, True), If(True, Zero, Zero), Zero)
+    val t1 = Pred(Zero)
+    val t2 = Zero
+    val t3 = Zero
+    val t = If(t1, t2, t3)
+    val after = t.smallStep
+    print(after)
+    TypeProofs.smallStepIf(t, t1, t2, t3)
   }
 
 }

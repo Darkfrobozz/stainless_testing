@@ -24,8 +24,7 @@ object NormalProof {
                 t1 match
                     case True => assert(t2.size < t.size)
                     case False => assert(t3.size < t.size)
-                    case If(t11, t12, t13) => reducesOrRemainsSame(t11)
-                    case _ => ()
+                    case _ => reducesOrRemainsSame(t1)
             case Succ(t1) => reducesOrRemainsSame(t1)
             case Pred(t1) =>
                 t1 match

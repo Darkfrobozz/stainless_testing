@@ -5,6 +5,28 @@ import stainless.lang.*
 
 sealed trait Term {
 
+    def getType : TypeTree = {
+        this match
+            case Zero => IntegerType
+            case True => BooleanType
+            case False => BooleanType
+            case If(t1, t2, t3) => t1.getType match
+                case BooleanType => if (t2.getType == t3.getType) 
+                    {
+                        t2.getType
+                    } else {UnTyped}
+                case _ => UnTyped           
+            case Succ(t1) => t1.getType match
+                case IntegerType => IntegerType 
+                case _ => UnTyped
+            case Pred(t1) => t1.getType match
+                case IntegerType => IntegerType
+                case _ => UnTyped 
+            case iszero(t1) => t1.getType match
+                case IntegerType => BooleanType
+                case _ => UnTyped
+    }
+
     @induct
     def smallStep: Term = {
         this match
@@ -12,8 +34,7 @@ sealed trait Term {
                 t1 match
                     case True => t2
                     case False => t3
-                    case If(t11, t12, t13) => If(t11.smallStep, t12, t13)
-                    case _ => this
+                    case _ => If(t1.smallStep, t2, t3)
             case Succ(t1) => Succ(t1.smallStep)
             case Pred(t1) =>
                 t1 match

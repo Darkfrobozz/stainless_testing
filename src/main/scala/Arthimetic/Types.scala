@@ -3,18 +3,22 @@ package Arthimetic
 import stainless.annotation.* 
 import stainless.lang.*
 
-sealed trait Typed {
-    val getType: Types
-    def isTyped: Boolean = getType != UnTyped
-}
+sealed trait TypeTree
 
-sealed trait Types
+case object UnTyped extends TypeTree
+case object BooleanType extends TypeTree
+case object IntegerType extends TypeTree
 
-case object UnTyped extends Types
-case object BooleanType extends Types
-case object IntegerType extends Types
+// object Types {
+
+//     sealed trait Typed {
+//         val getType: TypeTree
+//         def isTyped: Boolean = getType != UnTyped
+//     }
 
 
-case object Problem extends Typed {
-    override val getType : Types = UnTyped
-}
+//     case class Problem(x : TypeTree) extends Typed {
+//         val getType = x
+//     }
+// }
+
