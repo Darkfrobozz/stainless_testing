@@ -1,3 +1,4 @@
+import Arthimetic.{Term, Nil, Pred, If, iszero, True, False}
 // For more information on writing tests, see
 import Tutorial.{pow, theoreomSlowEqualsFast}
 import Tutorial.slowPow
