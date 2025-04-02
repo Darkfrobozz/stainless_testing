@@ -5,6 +5,10 @@ import stainless.collection.List.*
 
 object Diophantine {
 
+    def adder(is: Int*) = {
+        is.fold(0)((ack, i) => ack + i)
+    }
+
     /**
       * 
       * Creates starting at m a list which contains a 1 in spot m then
