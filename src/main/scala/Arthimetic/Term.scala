@@ -3,7 +3,11 @@ package Arthimetic
 import stainless.annotation.* 
 import stainless.lang.*
 
-sealed trait Term {
+sealed trait Typed {
+    def thisType: TypeTree
+    def isTyped: Boolean = thisType != UnTyped
+}
+sealed trait Term extends Typed {
 
     def getType : TypeTree = {
         this match
@@ -89,15 +93,55 @@ sealed trait Term {
     }
 }
 
-case object Zero extends Term
-case object True extends Term
-case object False extends Term
-case class If(t1:Term, t2:Term, t3:Term) extends Term
+case object Zero extends Term {
+    def thisType: TypeTree = IntegerType
+}
+case object True extends Term {
+    def thisType: TypeTree = BooleanType
+}
+case object False extends Term {
+    def thisType: TypeTree = BooleanType
+}
+case class If(@induct t1:Term, @induct t2:Term, @induct t3:Term) extends Term {
+    def thisType: TypeTree = {
+        if (t1.thisType != BooleanType) {
+            UnTyped
+        } else if (t2.thisType == t3.thisType){
+            t2.thisType
+        } else {
+            UnTyped
+        }
+    }
+}
 
 // These have many different rules
-case class Succ(t1: Term) extends Term
-case class Pred(t1: Term) extends Term
-case class iszero(t1: Term) extends Term
+case class Succ(@induct t1: Term) extends Term {
+    def thisType: TypeTree = {
+        if (t1.thisType == IntegerType) {
+            IntegerType
+        } else {
+            UnTyped
+        }
+    }
+}
+case class Pred(@induct t1: Term) extends Term {
+    def thisType: TypeTree = {
+        if (t1.thisType == IntegerType) {
+            IntegerType
+        } else {
+            UnTyped
+        }
+    }
+}
+case class iszero(@induct t1: Term) extends Term {
+    def thisType: TypeTree = {
+        if (t1.thisType == IntegerType) {
+            BooleanType
+        } else {
+            UnTyped
+        }
+    }
+}
 
 
 object Term {
