@@ -95,5 +95,5 @@ object NormalProof {
             // This means that progress will apply for next recursion as well
             normalOfTypedIsNV(k)
         }
-    }.ensuring(findNormal(t).valueForm)
+    }.ensuring(findNormal(t).valueForm && findNormal(t).getType == t.getType)
 }
