@@ -83,6 +83,10 @@ sealed trait Term {
             case Succ(t1) => true
             case _ => false
     }
+
+    def valueForm : Boolean = {
+        this.checkBool || this.checkNV
+    }
 }
 
 case object Zero extends Term

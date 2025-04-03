@@ -2,6 +2,8 @@ package Arthimetic
 
 import stainless.annotation.* 
 import stainless.lang.*
+import Arthimetic.TypeProofs.progress
+import Arthimetic.TypeProofs.preservation
 
 // Could I do these proofs without checkNV?
 object NormalProof {
@@ -71,4 +73,27 @@ object NormalProof {
         smallstepRetainsSize(t)
         nvDefinedBySize(t, t.smallStep)
     }.ensuring(t == t.smallStep)
+
+
+    def normalOfTypedIsNV(t : Term) : Unit = {
+        require(t.getType != UnTyped)
+        decreases(t.size)
+        val k = t.smallStep
+        reducesOrRemainsSame(t)
+        // This should inform us that we will break at normal form.
+        if (t.valueForm) {
+            t match
+                case False => ()
+                case True => ()
+                case Zero => ()
+                case Succ(t1) => nvIsNormal(t) 
+        } else {
+            preservation(t)
+            progress(t)
+            assert(k != t)
+            // Preservation makes sure that t.getType does not become UnTyped
+            // This means that progress will apply for next recursion as well
+            normalOfTypedIsNV(k)
+        }
+    }.ensuring(findNormal(t).valueForm)
 }
