@@ -104,42 +104,35 @@ case object False extends Term {
 }
 case class If(@induct t1:Term, @induct t2:Term, @induct t3:Term) extends Term {
     def thisType: TypeTree = {
-        if (t1.thisType != BooleanType) {
-            UnTyped
-        } else if (t2.thisType == t3.thisType){
-            t2.thisType
-        } else {
-            UnTyped
-        }
+        t1.getType match
+            case BooleanType => if (t2.getType == t3.getType) 
+                {
+                    t2.getType
+                } else {UnTyped}
+            case _ => UnTyped           
     }
 }
 
 // These have many different rules
 case class Succ(@induct t1: Term) extends Term {
     def thisType: TypeTree = {
-        if (t1.thisType == IntegerType) {
-            IntegerType
-        } else {
-            UnTyped
-        }
+        t1.getType match
+            case IntegerType => IntegerType 
+            case _ => UnTyped
     }
 }
 case class Pred(@induct t1: Term) extends Term {
     def thisType: TypeTree = {
-        if (t1.thisType == IntegerType) {
-            IntegerType
-        } else {
-            UnTyped
-        }
+        t1.getType match
+            case IntegerType => IntegerType 
+            case _ => UnTyped
     }
 }
 case class iszero(@induct t1: Term) extends Term {
     def thisType: TypeTree = {
-        if (t1.thisType == IntegerType) {
-            BooleanType
-        } else {
-            UnTyped
-        }
+        t1.getType match
+            case IntegerType => IntegerType 
+            case _ => UnTyped
     }
 }
 
