@@ -39,8 +39,6 @@ object Num {
             case Integer(x) => Some(x)
             case Add(x, y) => add(x,y)
             case Unknown => None()
-        
-
     }
 
 }
