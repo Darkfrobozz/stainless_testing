@@ -1,11 +1,17 @@
-sealed trait Expr {
-    def toPow(n: BigInt) : IntPow = {
-        IntPow(this, n)
+package class_invariants
+sealed trait Expr
+object Expr {
+    def IntPow(t: Expr, n: BigInt): Expr = {
+        Trees.IntPow(t, n)
     }
 }
 
-case class IntPow(base: Expr, n: BigInt) extends Expr {
-    require(n > 0)
+object Trees {
+    case class IntPow(base: Expr, exp: BigInt) extends Expr {
+        require(exp > 0)
+    }
+
+    case class Terminal(value: BigInt) extends Expr
+
 }
 
-case class Terminal(value: BigInt) extends Expr
