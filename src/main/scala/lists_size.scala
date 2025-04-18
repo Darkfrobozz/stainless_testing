@@ -20,9 +20,7 @@ object IntPow {
     def apply(base: BigInt, exp: BigInt) = {
         new IntPow(base, exp)
     }
-    def unapply(e: Expr) : Option[(BigInt, BigInt)] = {
-        e match
-            case i: IntPow => Some((i.base, i.exp)) 
-            case _ => None()        
+    def unapply(i: IntPow) : Option[(BigInt, BigInt)] = {
+        Some((i.base, i.exp))
     }
 }
